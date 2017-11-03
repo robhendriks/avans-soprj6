@@ -1,0 +1,54 @@
+﻿<Window x:Class="GoInsp.View.DashboardWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GoInsp.View"
+        xmlns:fm="clr-namespace:FlexMenu.Controls;assembly=FlexMenu"
+        mc:Ignorable="d"
+        Title="Dashboard" 
+        Width="800" Height="600"
+        DataContext="{Binding Dashboard, Source={StaticResource Locator} }">
+    <Window.Resources>
+        <ResourceDictionary>
+            <BitmapImage x:Key="ImageIcon" UriSource="pack://application:,,,/Resources/Menu/Icon.png"/>
+            <BitmapImage x:Key="ImageDashboard" UriSource="pack://application:,,,/Resources/Menu/Dashboard.png"/>
+            <BitmapImage x:Key="ImageInspect" UriSource="pack://application:,,,/Resources/Menu/Inspect.png"/>
+            <BitmapImage x:Key="ImageAdministration" UriSource="pack://application:,,,/Resources/Menu/Administration.png"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30pt"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="135pt"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <fm:FlexHeader Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                               Icon="{StaticResource ImageIcon}"
+                               Title="Menu" TitleWidth="135pt"
+                               Subtitle="{Binding Path=Content.Title, ElementName=frame}" SubtitleWidth="*"/>
+
+            <fm:FlexMenu Grid.Column="0" Grid.Row="1">
+                <fm:FlexMenuItem Content="Dashboard" Icon="{StaticResource ImageDashboard}"
+                                 Command="{Binding Sheets.Command}" CommandParameter="Dashboard"/>
+                <fm:FlexMenuItem Content="Inspecteren" Icon="{StaticResource ImageInspect}"
+                                 Command="{Binding Sheets.Command}" CommandParameter="Inspect"/>
+                <fm:FlexMenuItem Content="Administratie" Icon="{StaticResource ImageAdministration}"
+                                 Command="{Binding Sheets.Command}" CommandParameter="Administration"/>
+                <fm:FlexMenu.Append>
+                    <fm:FlexUserBar Content="Jan Janssen"/>
+                </fm:FlexMenu.Append>
+            </fm:FlexMenu>
+
+            <Grid Grid.Column="1" Grid.Row="1" Margin="15">
+                <Frame x:Name="frame" Source="{Binding Sheets.Source}" Style="{StaticResource BasicFrame}"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

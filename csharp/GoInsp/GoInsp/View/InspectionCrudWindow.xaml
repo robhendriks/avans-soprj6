@@ -1,0 +1,150 @@
+﻿<Window x:Class="GoInsp.View.InspectionCrudWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GoInsp.View"
+        xmlns:fm="clr-namespace:FlexMenu.Controls;assembly=FlexMenu"
+        mc:Ignorable="d"
+        Title="Inspecties" Style="{StaticResource windowStyle}" 
+        Width="800" Height="600"
+        DataContext="{Binding Inspections, Source={StaticResource Locator} }">
+    <Window.Resources>
+        <ResourceDictionary>
+            <BitmapImage x:Key="ImageIcon" UriSource="pack://application:,,,/Resources/Menu/Icon.png"/>
+            <BitmapImage x:Key="ImageUsers" UriSource="pack://application:,,,/Resources/Menu/Users.png"/>
+            <BitmapImage x:Key="ImageRoles" UriSource="pack://application:,,,/Resources/Menu/Roles.png"/>
+            <BitmapImage x:Key="ImageNodes" UriSource="pack://application:,,,/Resources/Menu/Nodes.png"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        
+        <!--Lightbox code below-->
+        <Rectangle Fill="Black" Opacity="0.8" Panel.ZIndex="1" Visibility="{Binding Visibility}"/>
+        <StackPanel Panel.ZIndex="2" Width="210" VerticalAlignment="Center" Visibility="{Binding Visibility}" Background="White">
+            <Grid>
+                <Label Content="Rol toevoegen" HorizontalAlignment="Center"/>
+                <Button Content="X" Foreground="White" Command="{Binding StopAddingInspection}" HorizontalAlignment="Right" VerticalAlignment="Top" Background="Red" Width="30" Height="22"/>
+            </Grid>
+            <Label Content="Naam:" Background="White"/>
+            <TextBox Height="23" Text="{Binding SelectedItem.RoleName}"/>
+            <Label Content="Beschrijving" Background="White"/>
+            <TextBox Height="23" Text="{Binding SelectedItem.RoleDescription}"/>
+            <Grid>
+                <Button Content="Toevoegen" Style="{StaticResource ButtonStyle}" Command="{Binding AddInspection}" HorizontalAlignment="Center"/>
+            </Grid>
+        </StackPanel>
+        <!--Lightbox code above-->
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30pt"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="135pt"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <fm:FlexHeader Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                               Icon="{StaticResource ImageIcon}"
+                               Title="Menu" TitleWidth="135pt"
+                               Subtitle="Inspecties" SubtitleWidth="*">
+                <fm:FlexBreadcrumbs>
+                    <fm:FlexBreadcrumb Content="Administratie"/>
+                    <fm:FlexBreadcrumb Content="Inspecties"/>
+                </fm:FlexBreadcrumbs>
+            </fm:FlexHeader>
+
+            <fm:FlexMenu Grid.Column="0" Grid.Row="1">
+                <fm:FlexMenuItem Content="Gebruikers" Icon="{StaticResource ImageUsers}"/>
+                <fm:FlexMenuItem Content="Rollen" Icon="{StaticResource ImageRoles}"/>
+                <fm:FlexMenuItem Content="Nodes" Icon="{StaticResource ImageNodes}"/>
+            </fm:FlexMenu>
+
+            <Grid Grid.Column="1" Grid.Row="1" Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa." Style="{StaticResource WindowDescriptionStyle}" />
+                <Image Style="{StaticResource ImageAddStyle}">
+                    <Image.InputBindings>
+                        <MouseBinding Gesture="LeftClick" Command="{Binding ChangeToAddMode}" />
+                    </Image.InputBindings>
+                </Image>
+                <TextBox Style="{StaticResource textboxSearchStyle}" Text="{Binding Query, UpdateSourceTrigger=PropertyChanged}" />
+                <Image Style="{StaticResource ImageSearchStyle}" />
+
+                <Rectangle Style="{StaticResource DataGridBackgroundStyle}" />
+                <DataGrid Style="{StaticResource DataGridCRUDStyle}" ItemsSource="{Binding Inspections}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="0.2*" Header="ID" Binding="{Binding InspectionID}"></DataGridTextColumn>
+                        <DataGridTextColumn Width="0.5*" Header="Bedrijf" Binding="{Binding Inspection.Company.CompanyName}"></DataGridTextColumn>
+                        <DataGridTextColumn Width="0.5*" Header="Inspecteur">
+                            <DataGridTextColumn.Binding>
+                                <MultiBinding StringFormat="{}{0} {1}">
+                                    <Binding Path="Inspection.User.UserFirstName" />
+                                    <Binding Path="Inspection.User.UserLastName" />
+                                </MultiBinding>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Width="*" Header="Omschrijving" Binding="{Binding InspectionDescription}"></DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <Rectangle Style="{StaticResource CRUDdividertyle}" />
+
+                <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="10 20 10 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MaxWidth="230" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <DockPanel Grid.Row="0" Grid.Column="0" Margin="0">
+                        <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
+                            <Label Style="{StaticResource LabelTextBoxStyle}" Content="Naam" />
+                            <ComboBox Style="{StaticResource ComboBoxCRUDStyle}"  ItemsSource="{Binding Companies}" SelectedValue="{Binding SelectedItem.InspectionCompanyID}" DisplayMemberPath="CompanyName" SelectedValuePath="CompanyID"/>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
+                            <Label Style="{StaticResource LabelTextBoxStyle}" Content="Inspecteur" />
+                            <ComboBox Style="{StaticResource ComboBoxCRUDStyle}"  ItemsSource="{Binding Users}" SelectedValue="{Binding SelectedItem.InspectionUserID}" DisplayMemberPath="UserFirstName" SelectedValuePath="UserID"/>
+                        </StackPanel>
+                    </DockPanel>
+
+                    <DockPanel Grid.Row="0" Grid.Column="1" Margin="10 0 -10 0" VerticalAlignment="Stretch">
+                        <Grid DockPanel.Dock="Bottom">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <DockPanel DockPanel.Dock="Bottom">
+                                <Label DockPanel.Dock="Top" Style="{StaticResource LabelTextBoxStyle}" Content="Omschrijving" />
+                                <Grid DockPanel.Dock="Bottom">
+                                    <Button Content="Opslaan" Command="{Binding SaveRole}" Style="{StaticResource ButtonStyle}" Height="30" HorizontalAlignment="Left"/>
+                                    <Button Content="Verwijderen" Command="{Binding DeleteRole}" Style="{StaticResource ButtonStyle}" Height="30" HorizontalAlignment="Right"/>
+                                </Grid>
+                                <TextBox DockPanel.Dock="Bottom" Style="{StaticResource TextAreaCRUDStyle}" Text="{Binding SelectedItem.InspectionDescription, Mode=TwoWay}" Margin="0,0,0,10"/>
+                            </DockPanel>
+                        </Grid>
+                    </DockPanel>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+   
+</Window>

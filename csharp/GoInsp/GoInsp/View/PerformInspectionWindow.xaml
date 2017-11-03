@@ -1,0 +1,176 @@
+﻿<Window x:Class="GoInsp.View.PerformInspectionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:fm="clr-namespace:FlexMenu.Controls;assembly=FlexMenu"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:local="clr-namespace:GoInsp.View"
+        mc:Ignorable="d"
+        Title="Template Crud" Style="{StaticResource windowStyle}"
+        DataContext="{Binding PerformInspection, Source={StaticResource Locator} }">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <BitmapImage x:Key="ImageMenu" UriSource="pack://application:,,,/Resources/Menu/Icon.png"/>
+            <BitmapImage x:Key="ImageInspection" UriSource="pack://application:,,,/Resources/Menu/Inspection.png"/>
+            <BitmapImage x:Key="ImageOnline" UriSource="pack://application:,,,/Resources/Generic/Online.png"/>
+            <BitmapImage x:Key="ImageOffline" UriSource="pack://application:,,,/Resources/Generic/Offline.png"/>
+            <BitmapImage x:Key="ImageAdd" UriSource="pack://application:,,,/Resources/Generic/Add.png"/>
+            <BitmapImage x:Key="ImageAttachment" UriSource="pack://application:,,,/Resources/Generic/Attachment.png"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <fm:FlexLightbox Title="blabla"
+                         Icon="{StaticResource ImageInspection}"
+                         Command="{Binding LightboxCloseCommand}">
+            <Grid>
+
+            </Grid>
+        </fm:FlexLightbox>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30pt"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="135pt"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.5*"/>
+            </Grid.ColumnDefinitions>
+
+            <fm:FlexHeader Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
+                       Icon="{StaticResource ImageMenu}"
+                       Title="Menu" TitleWidth="135pt"
+                       Subtitle="{Binding SelectedInpection.InspectionTitle}" FontWeight="Bold" SubtitleWidth="*">
+                <fm:FlexBreadcrumbs>
+                    <fm:FlexBreadcrumb Content="Inspecties"/>
+                    <fm:FlexBreadcrumb Content="uitvoeren"/>
+                </fm:FlexBreadcrumbs>
+            </fm:FlexHeader>
+
+            <fm:FlexMenu Grid.Column="0" Grid.Row="1" Grid.RowSpan="2">
+                <fm:FlexMenuItem Content="Inspectie uitvoeren" Icon="{StaticResource ImageInspection}"/>
+                <fm:FlexMenuItem Content="Connectie" Icon="{Binding ConnectionImage}"/>
+            </fm:FlexMenu>
+
+            <Rectangle Grid.Row="1" Grid.Column="1" Fill="#FFFFFF" Height="135" VerticalAlignment="Top" Margin="10" />
+            <Grid Grid.Row="1" Grid.Column="1" Height="110" VerticalAlignment="Top" Margin="20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.6*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Label Grid.Column="0" FontWeight="Bold" Grid.Row="0" Style="{StaticResource LabelTextboxStyle}" Margin="0" Content="Bedrijf" />
+                <Label Grid.Column="0" FontWeight="Bold" Grid.Row="1" Style="{StaticResource LabelTextboxStyle}" Margin="0" Content="Inspecteur" />
+                <Label Grid.Column="0" FontWeight="Bold" Grid.Row="2" Style="{StaticResource LabelTextboxStyle}" Margin="0" Content="Start Datum" />
+                <Label Grid.Column="0" FontWeight="Bold" Grid.Row="3" Style="{StaticResource LabelTextboxStyle}" Margin="0" Content="Eind Datum" />
+
+                <Label Grid.Column="1" Grid.Row="0" Style="{StaticResource LabelTextboxStyle}" Margin="0" Content="{Binding SelectedInpection.Company.CompanyName}" />
+                <Label Grid.Column="1" Grid.Row="1" Style="{StaticResource LabelTextboxStyle}" Margin="0" Content="{Binding SelectedInpection.User.UserFirstName}" />
+                <Label Grid.Column="1" Grid.Row="2" Style="{StaticResource LabelTextboxStyle}" Margin="0" Content="{Binding SelectedInpection.InspectionStartDate}" />
+                <Label Grid.Column="1" Grid.Row="3" Style="{StaticResource LabelTextboxStyle}" Margin="0" Content="{Binding SelectedInpection.InspectionEndDate}" />
+            </Grid>
+            
+            <DockPanel Margin="0 170 0 0" Grid.Row="1" Grid.Column="1">
+                <ScrollViewer Name="scrollviewer" DockPanel.Dock="Bottom" Margin="10 -10 10 10" VerticalScrollBarVisibility="Auto" HorizontalContentAlignment="Stretch">
+                    <StackPanel Width="{Binding ElementName=scrollviewer,Path=ActualWidth}" MaxWidth="450" HorizontalAlignment="Left">
+                        <ItemsControl ItemsSource="{Binding OpenQuestions}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0 0 0 10">
+                                        <Label Style="{StaticResource InspectionQuestionTitleStyle}" Content="{Binding Question.QuestionTitle}" Margin="0" />
+                                        <TextBlock FontStyle="Italic" Style="{StaticResource WindowDescriptionStyle}" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding Question.QuestionDescription}" Margin="5 -5 5 5" />
+                                        <TextBox Margin="5 0 20 0" Height="90" TextWrapping="Wrap" Text="{Binding QuestionTempValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextAreaCRUDStyle}" />
+                                        <Label Margin="15 0 5 0" Style="{StaticResource InspectionQuestionTitleStyle}" FontSize="14" Content="Bijlage" Foreground="#323232" />
+                                        <ComboBox Margin="15 5 20 5" ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.FileNames}" DisplayMemberPath="."/>
+                                        <Rectangle Style="{StaticResource CRUDdividertyle}" Margin="0 15 20 0" Fill="#cacaca"/> 
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <ItemsControl ItemsSource="{Binding MultipleChoiceQuestions}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0 0 0 10">
+                                        <Label Style="{StaticResource InspectionQuestionTitleStyle}" Content="{Binding Question.QuestionTitle}" Margin="0" />
+                                        <TextBlock FontStyle="Italic" Style="{StaticResource WindowDescriptionStyle}" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding Question.QuestionDescription}" Margin="5 -5 5 5" />
+                                        <ItemsControl ItemsSource="{Binding Question.Answers}" Margin="20 0 0 0">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <RadioButton GroupName="{Binding Question.QuestionID}" Content="{Binding AnswerTitle}" >
+                                                        <i:Interaction.Triggers>
+                                                            <i:EventTrigger EventName="Checked">
+                                                                <i:InvokeCommandAction Command="{Binding DataContext.SetSelectedAnswer, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="{Binding .}"/>
+                                                            </i:EventTrigger>
+                                                        </i:Interaction.Triggers>
+                                                    </RadioButton>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                        <RadioButton Margin="20 0 0 5" GroupName="{Binding Question.QuestionID}" Content="Anders" >
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="Checked">
+                                                    <i:InvokeCommandAction Command="{Binding DataContext.SetOptional, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="{Binding QuestionID}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </RadioButton>
+                                        <TextBox IsEnabled="{Binding OptionalValue}" Text="{Binding QuestionTempValue, UpdateSourceTrigger=PropertyChanged}" Margin="20 0 20 0" Height="50" TextWrapping="Wrap" Style="{StaticResource TextAreaCRUDStyle}" />
+                                        <ComboBox Margin="20 5 20 5" ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.FileNames}" DisplayMemberPath="."/>
+                                        <Rectangle Style="{StaticResource CRUDdividertyle}" Margin="0 15 20 0" Fill="#cacaca"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <Button Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="1" Command="{Binding SaveInspection}" Content="Opslaan" Margin="0 20 20 20" />
+                    </StackPanel>
+                </ScrollViewer>
+            </DockPanel>
+
+            <Rectangle Style="{StaticResource CRUDdividerVerticaltyle}" Grid.Row="1" Grid.Column="1" />
+
+            <DockPanel Grid.Row="1" Grid.Column="2">
+                <DockPanel DockPanel.Dock="Top" Height="40" Margin="0">
+                    <Label DockPanel.Dock="Left" Style="{StaticResource menuTitleStyle}" Content="Bijlagen" Foreground="#323232" />
+                    <Image DockPanel.Dock="Right" Cursor="Hand" Source="{StaticResource ImageAdd}" Margin="0 0 10 2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="25" Width="25" >
+                        <Image.InputBindings>
+                            <MouseBinding Gesture="LeftClick" Command="{Binding AddMedia}" />
+                        </Image.InputBindings>
+                    </Image>
+                </DockPanel>
+                <ScrollViewer DockPanel.Dock="Bottom" Name="scrollviewerAttachments" Margin="10 0 10 10" VerticalScrollBarVisibility="Auto" HorizontalContentAlignment="Stretch">
+                    <ItemsControl ItemsSource="{Binding FileNames}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource AttachmentStyle}">
+                                    <Border.InputBindings>
+                                        <MouseBinding Gesture="LeftClick" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}, Path=DataContext.DeleteFileFromInspection}" CommandParameter="{Binding .}" />
+                                    </Border.InputBindings>
+                                    <StackPanel Orientation="Vertical">
+                                        <Label Foreground="White" Content="{Binding .}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                                        <Image Source="{StaticResource ImageAttachment}" Width="30" Height="30" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </DockPanel>
+            <Rectangle Visibility="{Binding UploadingVisibility}" Fill="#FFFFFF" Grid.Row="1" Grid.Column="2" Opacity="0.9" />
+            <Image Visibility="{Binding UploadingVisibility}" gif:ImageBehavior.AnimatedSource="../Resources/Generic/loader.gif" Height="64" Grid.Row="1" Grid.Column="2" />
+        </Grid>
+    </Grid>
+</Window>

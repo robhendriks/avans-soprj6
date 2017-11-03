@@ -1,0 +1,70 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:GoInsp.UI">
+    
+    <!--Includes-->
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="GoInsp.UI;component/Themes/Colors.xaml"/>
+        <ResourceDictionary Source="GoInsp.UI;component/Themes/Fonts.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    <!--/Includes-->
+    
+    <!--TileButton-->
+    <Style TargetType="{x:Type local:TileButton}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:TileButton}">
+                    <!--Elements-->
+                    <StackPanel Orientation="Vertical">
+                        <Grid Width="80" Height="80" Background="{StaticResource BrushGray1}">
+                            <Canvas Panel.ZIndex="100" ClipToBounds="True">
+                                <Ellipse x:Name="Shape" Canvas.Left="40" Canvas.Top="40" Width="0" Height="0" Fill="{StaticResource BrushGray2}"/>
+                            </Canvas>
+                            <Grid Panel.ZIndex="200">
+                                <Image Source="{TemplateBinding Image}" Width="50" Height="50"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Grid>
+                        <Grid>
+                            <Label Content="{TemplateBinding Content}" HorizontalAlignment="Center" Style="{StaticResource FontXS}" Foreground="Gray"/>
+                        </Grid>
+
+                        <!--Animations-->
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup Name="CommonStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition GeneratedDuration="0:0:.3"/>
+                                    <VisualTransition GeneratedDuration="0:0:.1" From="MouseOver" To="Pressed"/>
+                                </VisualStateGroup.Transitions>
+                                <VisualState Name="Normal"/>
+                                <VisualState Name="MouseOver">
+                                    <Storyboard>
+                                        <DoubleAnimation To="160" Storyboard.TargetName="Shape" Storyboard.TargetProperty="Width"/>
+                                        <DoubleAnimation To="160" Storyboard.TargetName="Shape" Storyboard.TargetProperty="Height"/>
+                                        <DoubleAnimation To="-40" Storyboard.TargetName="Shape" Storyboard.TargetProperty="(Canvas.Left)"/>
+                                        <DoubleAnimation To="-40" Storyboard.TargetName="Shape" Storyboard.TargetProperty="(Canvas.Top)"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState Name="Pressed">
+                                    <Storyboard>
+                                        <DoubleAnimation To="160" Storyboard.TargetName="Shape" Storyboard.TargetProperty="Width"/>
+                                        <DoubleAnimation To="160" Storyboard.TargetName="Shape" Storyboard.TargetProperty="Height"/>
+                                        <DoubleAnimation To="-40" Storyboard.TargetName="Shape" Storyboard.TargetProperty="(Canvas.Left)"/>
+                                        <DoubleAnimation To="-40" Storyboard.TargetName="Shape" Storyboard.TargetProperty="(Canvas.Top)"/>
+                                        <ColorAnimation To="{StaticResource ColorGray3}" Storyboard.TargetName="Shape" Storyboard.TargetProperty="Fill.(SolidColorBrush.Color)"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState Name="Disabled"/>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <!--/Animations-->
+                    </StackPanel>
+                    <!--/Elements-->
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--/TileButton-->
+    
+</ResourceDictionary>

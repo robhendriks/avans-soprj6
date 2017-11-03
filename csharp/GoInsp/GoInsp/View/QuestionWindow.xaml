@@ -1,0 +1,174 @@
+﻿<Window x:Class="GoInsp.View.QuestionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:fm="clr-namespace:FlexMenu.Controls;assembly=FlexMenu"
+        xmlns:local="clr-namespace:GoInsp.View"
+        mc:Ignorable="d"
+        Title="QuestionWindow" Style="{StaticResource windowStyle}"
+        DataContext="{Binding Questions, Source={StaticResource Locator}}">
+    <Window.Resources>
+        <ResourceDictionary>
+            <BitmapImage x:Key="ImageMenu" UriSource="pack://application:,,,/Resources/Menu/Icon.png"/>
+            <BitmapImage x:Key="ImageTemplates" UriSource="pack://application:,,,/Resources/Menu/Templates.png"/>
+            <BitmapImage x:Key="ImageAddTemplates" UriSource="pack://application:,,,/Resources/Menu/AddTemplate.png"/>
+            <BitmapImage x:Key="ImageQuestions" UriSource="pack://application:,,,/Resources/Menu/Vragen.png"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <fm:FlexLightbox Title="Vraag toevoegen" 
+                         Icon="{StaticResource ImageAddTemplates}"
+                         Command="{Binding LightboxCloseCommand}">
+
+            <Frame Name="AddQuestionFrame" Source="../Pages/QuestionPage.xaml"> </Frame>
+        </fm:FlexLightbox>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="135pt"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <fm:FlexHeader Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
+                       Icon="{StaticResource ImageMenu}"
+                       Title="Menu" TitleWidth="135pt"
+                       Subtitle="Templates" SubtitleWidth="*">
+                <fm:FlexBreadcrumbs>
+                    <fm:FlexBreadcrumb Content="Management Dashboard"/>
+                    <fm:FlexBreadcrumb Content="Templates"/>
+                </fm:FlexBreadcrumbs>
+            </fm:FlexHeader>
+
+            <fm:FlexMenu Grid.Column="0" Grid.Row="1" Grid.RowSpan="2">
+                <fm:FlexMenuItem Content="Vragen overzicht" Icon="{StaticResource ImageQuestions}"/>
+                <fm:FlexMenuItem Content="Vraag toevoegen" Command="{Binding LightboxOpenCommand}" Icon="{StaticResource ImageAddTemplates}"/>
+                <fm:FlexMenuItem Content="Antwoord toevoegen" Icon="{StaticResource ImageAddTemplates}" Visibility="{Binding Visibility}"/>
+            </fm:FlexMenu>
+
+
+
+
+            <Grid Grid.Row="1" Grid.Column="1" Margin="10" Grid.RowSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+ 
+                <!--<StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical">
+                    <Label Margin="20, 0, 20 ,0" Content="Antwoord:" Foreground="#4e4e4e" FontSize="15" FontFamily="Myrad Pro" FontWeight="SemiBold" VerticalAlignment="Bottom">
+                        <Label.Style>
+                            <Style TargetType="Label">
+                                <Setter Property="Visibility" Value="Hidden"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsMeerkeuze}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Label.Style>
+                    </Label>-->
+
+
+                    <!--<TextBox Height="30" Background="#ECECEC" BorderThickness="1" BorderBrush="#27ae60" Margin="20 0 20 0" Padding="10 0 10 0" CaretBrush="#27ae60" SelectionBrush="#27ae60" HorizontalContentAlignment="Left" VerticalContentAlignment="Center">
+                        <TextBox.Style>
+                            <Style TargetType="TextBox">
+                                <Setter Property="Visibility" Value="Hidden"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsMeerkeuze}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>-->
+
+                    <!--<Button FontSize="12" Foreground="#FFFFFF" Background="#2bbc68" Height="30" Width="65" BorderThickness="0" Cursor="Hand" Margin="20, 0, 20, 0" HorizontalAlignment="Right" Content="Toevoegen">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Visibility" Value="Hidden"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border Background="{TemplateBinding Background}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#27ae60"/>
+                                    </Trigger>
+                                    <DataTrigger Binding="{Binding IsMeerkeuze}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+
+
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>-->
+
+
+                <Rectangle Style="{StaticResource DataGridBackgroundStyle}" Grid.ColumnSpan="1" Grid.Column="0" Margin="10"/>
+                <DataGrid SelectedItem="{Binding SelectedQuestion}" Grid.ColumnSpan="1" Grid.Column="0"  ItemsSource="{Binding Questions, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  Style="{StaticResource DataGridCRUDStyle}" Margin="10">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Vraag" Binding="{Binding QuestionTitle, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MaxWidth="100"/>
+                        <DataGridTextColumn Header="Beschrijving" Binding="{Binding QuestionDescription, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button HorizontalAlignment="Right" Style="{StaticResource ButtonRedStyle}"  Command="{Binding Source={StaticResource Locator}, Path=Questions.DeleteQuestionCommand}" >Verwijder
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button HorizontalAlignment="Right" Style="{StaticResource ButtonBlueStyle}">Wijzig
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <Rectangle Style="{StaticResource DataGridBackgroundStyle}" Grid.ColumnSpan="1" Grid.Column="1" Margin="10"/>
+                <DataGrid ItemsSource="{Binding Answers, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Style="{StaticResource DataGridCRUDStyle}" SelectedItem="{Binding SelectedAnswer}" Grid.Column="1" Margin="10">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Antwoord" Binding="{Binding AnswerTitle, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Beschrijving" Binding="{Binding AnswerDescription, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button HorizontalAlignment="Right" Style="{StaticResource ButtonRedStyle}"  Command="{Binding Source={StaticResource Locator}, Path=Questions.DeleteAnswerCommand}" >Verwijder
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button HorizontalAlignment="Right" Style="{StaticResource ButtonBlueStyle}">Wijzig
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,32 @@
+﻿<Page x:Class="GoInsp.Pages.AdministrationPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:ui="clr-namespace:GoInsp.UI;assembly=GoInsp.UI"
+      xmlns:local="clr-namespace:GoInsp.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="300"
+      Title="Administratie"
+      DataContext="{Binding AdministrationPage, Source={StaticResource Locator} }">
+
+    <Page.Resources>
+        <BitmapImage x:Key="ImageCompany" UriSource="pack://application:,,,/Resources/Menu/CompanyLarge.png"/>
+        <BitmapImage x:Key="ImageUser" UriSource="pack://application:,,,/Resources/Menu/UserLarge.png"/>
+        <BitmapImage x:Key="ImageTemplate" UriSource="pack://application:,,,/Resources/Menu/TemplateLarge.png"/>
+    </Page.Resources>
+    <StackPanel>
+        <Label Content="Navigeren" Style="{StaticResource FontM}"/>
+        <Label Content="Beheer bedrijven, gebruikers en vragenlijsten" Margin="0,0,0,10" Foreground="DarkGray" Style="{StaticResource FontXS}"/>
+        <WrapPanel Orientation="Horizontal">
+            <WrapPanel.Resources>
+                <Style TargetType="{x:Type ui:TileButton}">
+                    <Setter Property="Margin" Value="0,0,15,0"/>
+                </Style>
+            </WrapPanel.Resources>
+            <ui:TileButton Content="Bedrijven" Image="{StaticResource ImageCompany}" Command="{Binding OpenCompany}"/>
+            <ui:TileButton Content="Gebruikers" Image="{StaticResource ImageUser}" Command="{Binding OpenUser}"/>
+            <ui:TileButton Content="Vragenlijsten" Image="{StaticResource ImageTemplate}"/>
+        </WrapPanel>
+    </StackPanel>
+</Page>

@@ -1,0 +1,69 @@
+﻿<Window x:Class="GoInsp.View.ManagementDashboardWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:fm="clr-namespace:FlexMenu.Controls;assembly=FlexMenu"
+        xmlns:local="clr-namespace:GoInsp.View"
+        mc:Ignorable="d"
+        Title="Management dashboard" Style="{StaticResource windowStyle}"
+        DataContext="{Binding ManagementDashboard, Source={StaticResource Locator} }">
+    <Window.Resources>
+        <ResourceDictionary>
+            <BitmapImage x:Key="ImageMenu" UriSource="pack://application:,,,/Resources/Menu/Icon.png"/>
+            <BitmapImage x:Key="ImageRoles" UriSource="pack://application:,,,/Resources/Menu/Nodes.png"/>
+            <BitmapImage x:Key="ImageUsers" UriSource="pack://application:,,,/Resources/Menu/Users.png"/>
+            <BitmapImage x:Key="ImageTemplates" UriSource="pack://application:,,,/Resources/Menu/Templates.png"/>
+            <BitmapImage x:Key="ImageAdd" UriSource="pack://application:,,,/Resources/Generic/AddWhite.png"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30pt"/>
+                <RowDefinition Height="0.8*"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="135pt"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <fm:FlexHeader Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                       Icon="{StaticResource ImageMenu}"
+                       Title="Menu" TitleWidth="135pt"
+                       Subtitle="{Binding Path=Content.Title, ElementName=frame}" SubtitleWidth="*"/>
+
+            <fm:FlexMenu Grid.Column="0" Grid.Row="1">
+                <fm:FlexMenuItem Content="Vragenlijsten" Icon="{StaticResource ImageTemplates}"
+                                 Command="{Binding Sheets.Command}" CommandParameter="Templates"/>
+                <fm:FlexMenuItem Content="Gebruikers" Icon="{StaticResource ImageUsers}"
+                                 Command="{Binding Sheets.Command}" CommandParameter="Users"/>
+                <fm:FlexMenuItem Content="Rollen" Icon="{StaticResource ImageRoles}"
+                                 Command="{Binding Sheets.Command}" CommandParameter="Roles"/>
+            </fm:FlexMenu>
+
+            <!-- INHOUD -->
+            <Grid Grid.Column="1" Grid.Row="1" Margin="10">
+                <Frame x:Name="frame" Source="{Binding Sheets.Source}">
+                    <Frame.Style>
+                        <Style TargetType="Frame">
+                            <Style.Setters>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Frame">
+                                            <Grid>
+                                                <ContentPresenter/>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style.Setters>
+                        </Style>
+                    </Frame.Style>
+                </Frame>
+            </Grid>
+            
+        </Grid>
+    </Grid>
+</Window>

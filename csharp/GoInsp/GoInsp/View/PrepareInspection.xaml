@@ -1,0 +1,79 @@
+﻿<Window x:Class="GoInsp.View.PrepareInspection"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GoInsp.View"
+        xmlns:fm="clr-namespace:FlexMenu.Controls;assembly=FlexMenu"
+        mc:Ignorable="d"
+        Title="GoInsp" Style="{StaticResource windowStyle}"
+        DataContext="{Binding PrepareTemplate, Source={StaticResource Locator}}">
+    <Window.Resources>
+        <ResourceDictionary>
+            <BitmapImage x:Key="ImageTemplate" UriSource="pack://application:,,,/Resources/templates.png"/>
+            <BitmapImage x:Key="ImageQuestions" UriSource="pack://application:,,,/Resources/Menu/Vragen.png"/>
+            <BitmapImage x:Key="ImageIcon" UriSource="pack://application:,,,/Resources/Menu/Icon.png"/>
+            <BitmapImage x:Key="ImageGlobe" UriSource="pack://application:,,,/Resources/Menu/Globe.png"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30pt"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="135pt"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <fm:FlexHeader Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                               Icon="{StaticResource ImageIcon}"
+                               Title="Menu" TitleWidth="135pt"
+                               Subtitle="Inspectie Voorbereiden" SubtitleWidth="*">
+                <fm:FlexBreadcrumbs>
+                    <fm:FlexBreadcrumb Content="Dashboard"/>
+                    <fm:FlexBreadcrumb Content="Inspectie Voorbereiden"/>
+                </fm:FlexBreadcrumbs>
+            </fm:FlexHeader>
+
+            <fm:FlexMenu Grid.Column="0" Grid.Row="1">
+                <fm:FlexMenuItem IsEnabled="{Binding isEnabled}" Opacity="{Binding opacity}" Content="Vragenlijst" Icon="{StaticResource ImageQuestions}"/>
+                <fm:FlexMenuItem IsEnabled="{Binding isEnabled}" Opacity="{Binding opacity}" Content="Locatie" Icon="{StaticResource ImageGlobe}"/>
+            </fm:FlexMenu>
+
+            <Grid Grid.Column="1" Grid.Row="1" Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30" />
+                    <RowDefinition />
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Style="{StaticResource HeaderContent}">Inspectie Voorbereiding</Label>
+
+                <Rectangle Grid.Row="2" Style="{StaticResource DataGridBackgroundStyle}" Margin="0,0,0,10" />
+                <DataGrid Margin="0,0,0,10" Grid.Row="2" Style="{StaticResource DataGridCRUDStyle}" ItemsSource="{Binding Inspections}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="0.5*" Header="Inspectie" Binding="{Binding InspectionID}"></DataGridTextColumn>
+                        <DataGridTextColumn Width="0.5*" Header="Bedrijf" Binding="{Binding Company.CompanyName}"></DataGridTextColumn>
+                        <DataGridTextColumn Width="*" Header="Toegewezen Door">
+                            <DataGridTextColumn.Binding>
+                                <MultiBinding StringFormat="{}{0} {1}">
+                                    <Binding Path="User.UserFirstName" />
+                                    <Binding Path="User.UserLastName" />
+                                </MultiBinding>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Button Padding="10,0,10,0" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" Style="{StaticResource ButtonAddBottomStyle}" Command="{Binding PrepareInspectionCommand}">Bereid Inspectie Voor</Button>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
